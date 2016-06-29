@@ -12,9 +12,13 @@ namespace SerilogSample
             var storage = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
             var log = new LoggerConfiguration()
+                .WriteTo.AzureTableStorageWithProperties(storage, storageTableName: "customName", writeInBatches: true, batchPostingLimit: 100, period: new System.TimeSpan(0, 0, 3))
+                .CreateLogger();
+
+            /*var log = new LoggerConfiguration()
                 .WriteTo.AzureTableStorage(storage)
                 .MinimumLevel.Debug()
-                .CreateLogger();
+                .CreateLogger(); */
 
             log.Debug("hello world");
             log.Error("Oh no, an error");
